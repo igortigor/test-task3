@@ -1,17 +1,21 @@
-import java.util.HashMap;
-import java.util.Map;
-
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.*;
-import com.stripe.net.RequestOptions;
+import com.stripe.model.Customer;
+import com.stripe.model.CustomerCollection;
+import com.stripe.model.Invoice;
+import com.stripe.model.InvoiceItem;
+import com.stripe.model.InvoiceItemCollection;
+import com.stripe.model.Price;
 import com.stripe.param.InvoiceItemCreateParams;
 import com.stripe.param.PriceCreateParams;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
 
 
-    public static void testCreateInvoice(){
+    public static void testCreateInvoice() {
 
         Map<String, Object> params = new HashMap<>();
         params.put("customer", "cus_KHnW828G0fhwJh");
@@ -26,7 +30,7 @@ public class Main {
         }
     }
 
-    public static void testRetrieveOneInvoice(){
+    public static void testRetrieveOneInvoice() {
 
         try {
             InvoiceItem invoiceItem =
@@ -41,7 +45,7 @@ public class Main {
         }
     }
 
-    public static void testRetrieveAllInvoices(){
+    public static void testRetrieveAllInvoices() {
 
         Map<String, Object> params = new HashMap<>();
         params.put("limit", 3);
@@ -57,8 +61,7 @@ public class Main {
         }
     }
 
-    public static void testCreateCustomer(){
-
+    public static void testCreateCustomer() {
 
 
         Map<String, Object> customerMap = new HashMap<String, Object>();
@@ -77,30 +80,29 @@ public class Main {
     }
 
 
-    public static void testCreatePrice(){
+    public static void testCreatePrice() {
 
-            PriceCreateParams params = PriceCreateParams.builder()
-                    .setCurrency("pln")
-                    .setUnitAmount(100L)
-                    .setProductData(
-                            PriceCreateParams.ProductData.builder()
-                                    .setName("Test product name")
-                                    .build()
-                    )
-                    .build();
+        PriceCreateParams params = PriceCreateParams.builder()
+                .setCurrency("pln")
+                .setUnitAmount(100L)
+                .setProductData(
+                        PriceCreateParams.ProductData.builder()
+                                .setName("Test product name")
+                                .build()
+                )
+                .build();
 
-            try {
-                Price price = Price.create(params);
-                System.out.println(price);
-            } catch (StripeException e) {
-                e.printStackTrace();
-            }
+        try {
+            Price price = Price.create(params);
+            System.out.println(price);
+        } catch (StripeException e) {
+            e.printStackTrace();
+        }
 
     }
 
 
-
-    public static void testFindCustomer(String email){
+    public static void testFindCustomer(String email) {
 
         Customer customer;
 
@@ -119,11 +121,11 @@ public class Main {
             CustomerCollection customers =
                     Customer.list(existingCustomerParams);
 
-                if(customers.getData().size() == 0){
-                    customer = Customer.create(newCustomerParams);
-                }else{
-                    customer = customers.getData().get(0);
-                }
+            if (customers.getData().size() == 0) {
+                customer = Customer.create(newCustomerParams);
+            } else {
+                customer = customers.getData().get(0);
+            }
 
 
             System.out.println(customer);
@@ -134,7 +136,7 @@ public class Main {
         }
     }
 
-    public static Customer testGetCustomer(String email){
+    public static Customer testGetCustomer(String email) {
 
         //search customer params
         Map<String, Object> existingCustomerParams = new HashMap<>();
@@ -151,9 +153,9 @@ public class Main {
             CustomerCollection customers =
                     Customer.list(existingCustomerParams);
 
-            if(customers.getData().size() == 0){
+            if (customers.getData().size() == 0) {
                 return Customer.create(newCustomerParams);
-            }else{
+            } else {
                 return customers.getData().get(0);
             }
 
@@ -164,7 +166,7 @@ public class Main {
         return null;
     }
 
-    public static Price testGetPrice(long amount, String productName){
+    public static Price testGetPrice(long amount, String productName) {
 
         PriceCreateParams params = PriceCreateParams.builder()
                 .setCurrency("pln")
@@ -190,7 +192,7 @@ public class Main {
         InvoiceItemCreateParams invoiceItemParams =
                 InvoiceItemCreateParams.builder()
                         .setCustomer(testGetCustomer(email).getId())
-                        .setPrice(testGetPrice(price*100, productName).getId())
+                        .setPrice(testGetPrice(price * 100, productName).getId())
                         .build();
 
 
@@ -208,7 +210,7 @@ public class Main {
 
         //testCreateInvoice();
 
-       // testCreateCustomer();
+        // testCreateCustomer();
 
         //testRetrieveOneInvoice();
 
@@ -222,8 +224,7 @@ public class Main {
 
         //System.out.println(testGetPrice(100, "Test2 product name"));
 
-        testCreateInvoiceFull("i.andrievsky@mail.ru","Test3 product name",200);
-
+        testCreateInvoiceFull("i.andrievsky@mail.ru", "Test3 product name", 200);
 
 
     }
